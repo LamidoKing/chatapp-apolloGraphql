@@ -1,6 +1,8 @@
-import mongoose from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { hash, compare } from 'bcryptjs'
-const userSchema = new mongoose.Schema({
+
+const { ObjectId } = Schema.Types
+const userSchema = new Schema({
   email: {
     type: String,
     validate: {
@@ -16,6 +18,10 @@ const userSchema = new mongoose.Schema({
     }
   },
   name: String,
+  chats: [{
+    type: ObjectId,
+    ref: 'Chat'
+  }],
   password: String
 }, {
   timestamps: true
@@ -34,6 +40,6 @@ userSchema.statics.dontExist = async function (options) {
 userSchema.methods.matchesPassword = function (password) {
   return compare(password, this.password)
 }
-const User = mongoose.model('User', userSchema)
+const User = model('User', userSchema)
 
 export default User

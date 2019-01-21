@@ -1,9 +1,11 @@
-const { gql } = require('apollo-server')
+import { gql } from 'apollo-server-express'
 
-module.exports = gql`
+export default gql`
   type Message {
     id: ID!
     body: String!
-    user: User!
+    sender: User!
+    updatedAt: String!
+    createdAt: String!
   }
 `

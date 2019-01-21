@@ -1,10 +1,13 @@
 import { gql } from 'apollo-server-express'
 
-module.exports = gql`
+export default gql`
   type Chat {
     id: ID!
-    name: String
+    title: String
     users: [User!]!
     messages: [Message!]!
+    lastMessages: Message
+    updatedAt: String!
+    createdAt: String!
   }
 `
