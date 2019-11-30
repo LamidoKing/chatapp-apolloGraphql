@@ -16,6 +16,6 @@ const messageSchema = new Schema({
   timestamps: true
 })
 
-const message = model('message', messageSchema)
+const message = model('Message', messageSchema)
 
 export default message

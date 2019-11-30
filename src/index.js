@@ -33,7 +33,7 @@ import schemaDirectives from './CustomDirective'
     })
 
     app.use(session({
-      store,
+      store: store,
       name: SESS_NAME,
       secret: SESS_SECRET,
       resave: true,
@@ -45,8 +45,11 @@ import schemaDirectives from './CustomDirective'
         secure: PROD
       }
     }))
-    const server = new ApolloServer({
 
+    store.on('error', function (error) {
+      console.log(error)
+    })
+    const server = new ApolloServer({
       typeDefs,
       resolvers,
       schemaDirectives,

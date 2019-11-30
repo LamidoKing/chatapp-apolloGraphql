@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose'
+import { User } from './'
 
 const { ObjectId } = Schema.Types
+const USER_LIMIT = 5
 
 const chatSchema = new Schema({
   title: String,
@@ -8,7 +10,7 @@ const chatSchema = new Schema({
     type: ObjectId,
     ref: 'User'
   }],
-  lasstMessage: {
+  lastMessage: {
     type: ObjectId,
     ref: 'Message'
   }
@@ -16,6 +18,17 @@ const chatSchema = new Schema({
   timestamps: true
 })
 
-const chat = model('chat', chatSchema)
+chatSchema.pre('save', async function () {
+  if (!this.title) {
+    const users = await User.where('_id').in(this.users).limit(USER_LIMIT).select('name')
+    let title = users.map(user => user.name).join(', ')
+
+    if (this.users.length > USER_LIMIT) {
+      title += '...'
+    }
+    this.title = title
+  }
+})
+const chat = model('Chat', chatSchema)
 
 export default chat
